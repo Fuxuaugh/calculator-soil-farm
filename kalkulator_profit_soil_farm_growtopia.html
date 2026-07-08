@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Profit Soil Farm Growtopia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        growGreen: '#2c7a30',
+                        growDark: '#121810',
+                        cardDark: '#1e261a',
+                        accentYellow: '#ffd700',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar to match Growtopia theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121810;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c7a30;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3d9e43;
+        }
+    </style>
+</head>
+<body class="bg-growDark text-gray-100 font-sans min-h-screen pb-12">
+
+    <!-- Header / Navbar -->
+    <header class="bg-cardDark border-b border-growGreen/30 shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-growGreen p-2 rounded-lg text-accentYellow">
+                    <i class="fa-solid fa-calculator text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide text-white">GROWTOPIA PROFIT</h1>
+                    <p class="text-xs text-green-400">Soil Farm & TNB Optimizer</p>
+                </div>
+            </div>
+            <span class="bg-growGreen/20 text-green-400 border border-green-500/30 text-xs px-3 py-1 rounded-full font-semibold">
+                v2.1 Live Price Updated
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Panel: Interactive Inputs (Sliders & Controls) -->
+            <div class="lg:col-span-5 bg-cardDark p-6 rounded-2xl border border-growGreen/20 shadow-xl space-y-6">
+                <div class="border-b border-growGreen/20 pb-4">
+                    <h2 class="text-lg font-bold text-accentYellow flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i> Pengaturan Kalkulasi
+                    </h2>
+                    <p class="text-xs text-gray-400 mt-1">Geser nilai di bawah untuk menyesuaikan dengan kondisi modal & target kamu.</p>
+                </div>
+
+                <!-- Input Group 1: Seeds -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-green-400">1. Bibit & Panen (Soil Seed)</h3>
+                    
+                    <!-- Seed Count -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Jumlah Seed Ditanam</label>
+                            <span class="text-accentYellow font-bold" id="seedCountVal">2,600</span>
+                        </div>
+                        <input type="range" id="seedCount" min="1000" max="10000" step="100" value="2600" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Seed Price Rate -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Jumlah Seed (Beli)</label>
+                            <input type="number" id="seedRateQty" value="200" class="w-full bg-black border border-growGreen/30 rounded-lg p-2 text-white focus:outline-none focus:border-green-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Harga WL (Beli)</label>
+                            <input type="number" id="seedRateWl" value="22" class="w-full bg-black border border-growGreen/30 rounded-lg p-2 text-white focus:outline-none focus:border-green-500 text-sm">
+                        </div>
+                    </div>
+                    <div class="text-[11px] text-gray-400 italic">
+                        * Setara dengan rate: <span id="derivedSeedRate" class="text-green-400 font-semibold">9.09</span> seed / 1 WL
+                    </div>
+
+                    <!-- Block Yield -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Total Drop Block (Hasil Panen)</label>
+                            <span class="text-accentYellow font-bold" id="blockYieldVal">10,000</span>
+                        </div>
+                        <input type="range" id="blockYield" min="2000" max="30000" step="500" value="10000" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Input Group 2: Clear & World Specs -->
+                <div class="space-y-4 pt-4 border-t border-growGreen/10">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-green-400">2. Spesifikasi World Farm</h3>
+                    
+                    <!-- Blocks per Farm -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Kebutuhan Block / World</label>
+                            <span class="text-accentYellow font-bold" id="blocksPerFarmVal">2,500</span>
+                        </div>
+                        <input type="range" id="blocksPerFarm" min="2000" max="3000" step="50" value="2500" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- TNB / Clear World Cost -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Biaya Clear (TNB/CW) per World</label>
+                            <span class="text-accentYellow font-bold" id="clearWorldCostWlVal">26 WL</span>
+                        </div>
+                        <input type="range" id="clearWorldCostWl" min="0" max="60" step="1" value="26" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+                    
+                    <!-- Farm Sell Price -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Harga Jual per World Farm</label>
+                            <span class="text-accentYellow font-bold" id="farmSellPriceWlVal">200 WL</span>
+                        </div>
+                        <input type="range" id="farmSellPriceWl" min="150" max="400" step="5" value="200" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Input Group 3: Water Bucket -->
+                <div class="space-y-4 pt-4 border-t border-growGreen/10">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-green-400">3. Ekstra (Water Bucket)</h3>
+                    
+                    <!-- Water Bucket Count -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Jumlah Water Bucket</label>
+                            <span class="text-accentYellow font-bold" id="waterBucketCountVal">600</span>
+                        </div>
+                        <input type="range" id="waterBucketCount" min="0" max="3000" step="50" value="600" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Water Bucket Price -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <label class="text-gray-300">Rate Water Bucket per 1 WL</label>
+                            <span class="text-accentYellow font-bold" id="waterBucketPricePerWlVal">25</span>
+                        </div>
+                        <input type="range" id="waterBucketPricePerWl" min="5" max="50" step="1" value="25" 
+                            class="w-full accent-green-500 h-2 bg-black rounded-lg cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results & Breakdown -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- HUD Cards (Key Metrics) -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Net Profit Card -->
+                    <div class="col-span-2 md:col-span-3 bg-gradient-to-r from-green-950 to-emerald-900 border-2 border-green-500/50 p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-green-300 uppercase tracking-widest">PROFIT BERSIH (NET PROFIT)</span>
+                            <div class="text-3xl md:text-4xl font-extrabold text-white mt-1" id="hudNetProfit">0 WL</div>
+                            <p class="text-xs text-green-400 mt-1" id="hudReturnRate">ROI: +0%</p>
+                        </div>
+                        <div class="text-5xl text-accentYellow/80 hidden sm:block">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Farms Created -->
+                    <div class="bg-cardDark p-4 rounded-xl border border-growGreen/20 shadow-md">
+                        <span class="text-[11px] text-gray-400 block font-semibold uppercase">FARM TERPRODUKSI</span>
+                        <div class="text-2xl font-bold text-accentYellow mt-1" id="hudFarms">0 World</div>
+                        <span class="text-[10px] text-gray-500">Dari pembagian block</span>
+                    </div>
+
+                    <!-- Total Cost -->
+                    <div class="bg-cardDark p-4 rounded-xl border border-growGreen/20 shadow-md">
+                        <span class="text-[11px] text-gray-400 block font-semibold uppercase">TOTAL MODAL KELUAR</span>
+                        <div class="text-2xl font-bold text-red-400 mt-1" id="hudTotalCost">0 WL</div>
+                        <span class="text-[10px] text-gray-500">Seed + TNB + Water</span>
+                    </div>
+
+                    <!-- Total Revenue -->
+                    <div class="bg-cardDark p-4 rounded-xl border border-growGreen/20 shadow-md">
+                        <span class="text-[11px] text-gray-400 block font-semibold uppercase">TOTAL PENDAPATAN</span>
+                        <div class="text-2xl font-bold text-green-400 mt-1" id="hudRevenue">0 WL</div>
+                        <span class="text-[10px] text-gray-500">Hasil penjualan farm</span>
+                    </div>
+                </div>
+
+                <!-- Financial Statement / Breakdown Table -->
+                <div class="bg-cardDark p-6 rounded-2xl border border-growGreen/20 shadow-xl">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-green-400"></i> Laporan Keuangan Detail
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-growGreen/30 text-gray-400 text-xs uppercase">
+                                    <th class="py-3 px-2">Kategori</th>
+                                    <th class="py-3 px-2">Rincian Perhitungan</th>
+                                    <th class="py-3 px-2 text-right">Subtotal (WL)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-growGreen/10">
+                                <!-- Modal Seed Row -->
+                                <tr class="hover:bg-growDark/50">
+                                    <td class="py-3 px-2 font-medium">Modal Seed</td>
+                                    <td class="py-3 px-2 text-gray-400" id="rowSeedDesc">2,600 seeds @ 9.1/WL</td>
+                                    <td class="py-3 px-2 text-right text-red-400 font-semibold" id="rowSeedTotal">-286.0 WL</td>
+                                </tr>
+                                <!-- Modal Clear World Row -->
+                                <tr class="hover:bg-growDark/50">
+                                    <td class="py-3 px-2 font-medium">Biaya Clear World (TNB)</td>
+                                    <td class="py-3 px-2 text-gray-400" id="rowClearDesc">4 worlds @ 26 WL</td>
+                                    <td class="py-3 px-2 text-right text-red-400 font-semibold" id="rowClearTotal">-104.0 WL</td>
+                                </tr>
+                                <!-- Modal Water Bucket Row -->
+                                <tr class="hover:bg-growDark/50">
+                                    <td class="py-3 px-2 font-medium">Modal Water Bucket</td>
+                                    <td class="py-3 px-2 text-gray-400" id="rowWaterDesc">600 buckets @ 25/WL</td>
+                                    <td class="py-3 px-2 text-right text-red-400 font-semibold" id="rowWaterTotal">-24.0 WL</td>
+                                </tr>
+                                <!-- Revenue Row -->
+                                <tr class="hover:bg-growDark/50">
+                                    <td class="py-3 px-2 font-medium text-green-400">Hasil Penjualan Farm</td>
+                                    <td class="py-3 px-2 text-gray-400" id="rowRevenueDesc">4 worlds @ 250 WL</td>
+                                    <td class="py-3 px-2 text-right text-green-400 font-semibold" id="rowRevenueTotal">+1,000.0 WL</td>
+                                </tr>
+                                <!-- Final Balance -->
+                                <tr class="bg-growGreen/10 font-bold">
+                                    <td class="py-4 px-2 text-white">HASIL AKHIR (NET)</td>
+                                    <td class="py-4 px-2 text-gray-300">Pendapatan - Total Pengeluaran</td>
+                                    <td class="py-4 px-2 text-right text-green-400 text-lg" id="rowNetTotal">+586.0 WL</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Info Tips Box -->
+                <div class="bg-blue-950/40 border border-blue-500/30 p-5 rounded-2xl flex gap-4">
+                    <div class="text-blue-400 text-2xl mt-1">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <div class="text-xs text-gray-300 space-y-1">
+                        <h4 class="font-bold text-white">💡 Tips Pengelolaan Tambahan (Bonus Cuan)</h4>
+                        <p>1. <strong>Gems Keuntungan:</strong> Panen 2.600 pohon akan menyumbang sekitar <strong>35.000–50.000 Gems</strong>. Tukarkan ini dengan SSP / Surg Pack untuk di-WL-kan lagi!</p>
+                        <p>2. <strong>Penanganan Radiasi TNB:</strong> Jika menggunakan TNB, gunakan air (Water Bucket) untuk meredam api, dan lakukan perakitan saat radiasi mereda atau gunakan Hazmat Suit.</p>
+                        <p>3. <strong>Sisa Seed:</strong> Pohon Soil mempunyai persentase kelangsungan bibit (seed drop rate) yang tinggi, sehingga kamu bisa mendapat bibit sisa (extra seed) yang dapat dijual kembali.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive JS Calculations Engine -->
+    <script>
+        // DOM Elements
+        const elSeedCount = document.getElementById('seedCount');
+        const elSeedCountVal = document.getElementById('seedCountVal');
+        const elSeedRateQty = document.getElementById('seedRateQty');
+        const elSeedRateWl = document.getElementById('seedRateWl');
+        const elDerivedSeedRate = document.getElementById('derivedSeedRate');
+
+        const elBlockYield = document.getElementById('blockYield');
+        const elBlockYieldVal = document.getElementById('blockYieldVal');
+
+        const elBlocksPerFarm = document.getElementById('blocksPerFarm');
+        const elBlocksPerFarmVal = document.getElementById('blocksPerFarmVal');
+
+        const elClearWorldCostWl = document.getElementById('clearWorldCostWl');
+        const elClearWorldCostWlVal = document.getElementById('clearWorldCostWlVal');
+
+        const elFarmSellPriceWl = document.getElementById('farmSellPriceWl');
+        const elFarmSellPriceWlVal = document.getElementById('farmSellPriceWlVal');
+
+        const elWaterBucketCount = document.getElementById('waterBucketCount');
+        const elWaterBucketCountVal = document.getElementById('waterBucketCountVal');
+
+        const elWaterBucketPricePerWl = document.getElementById('waterBucketPricePerWl');
+        const elWaterBucketPricePerWlVal = document.getElementById('waterBucketPricePerWlVal');
+
+        // HUD Elements
+        const elHudNetProfit = document.getElementById('hudNetProfit');
+        const elHudReturnRate = document.getElementById('hudReturnRate');
+        const elHudFarms = document.getElementById('hudFarms');
+        const elHudTotalCost = document.getElementById('hudTotalCost');
+        const elHudRevenue = document.getElementById('hudRevenue');
+
+        // Table Elements
+        const elRowSeedDesc = document.getElementById('rowSeedDesc');
+        const elRowSeedTotal = document.getElementById('rowSeedTotal');
+        const elRowClearDesc = document.getElementById('rowClearDesc');
+        const elRowClearTotal = document.getElementById('rowClearTotal');
+        const elRowWaterDesc = document.getElementById('rowWaterDesc');
+        const elRowWaterTotal = document.getElementById('rowWaterTotal');
+        const elRowRevenueDesc = document.getElementById('rowRevenueDesc');
+        const elRowRevenueTotal = document.getElementById('rowRevenueTotal');
+        const elRowNetTotal = document.getElementById('rowNetTotal');
+
+        // Main Calculator Engine
+        function calculate() {
+            // Read Inputs
+            const seedCount = parseInt(elSeedCount.value);
+            const seedRateQty = parseFloat(elSeedRateQty.value) || 1;
+            const seedRateWl = parseFloat(elSeedRateWl.value) || 1;
+            const blockYield = parseInt(elBlockYield.value);
+            const blocksPerFarm = parseInt(elBlocksPerFarm.value);
+            const clearWorldCostWl = parseInt(elClearWorldCostWl.value);
+            const farmSellPriceWl = parseInt(elFarmSellPriceWl.value);
+            const waterBucketCount = parseInt(elWaterBucketCount.value);
+            const waterBucketPricePerWl = parseInt(elWaterBucketPricePerWl.value);
+
+            // 1. Calculate Real Seed Rate (seeds per 1 WL)
+            const seedPricePerWl = seedRateQty / seedRateWl;
+            elDerivedSeedRate.textContent = seedPricePerWl.toFixed(2);
+
+            // 2. Calculations
+            const totalSeedCost = seedCount / seedPricePerWl;
+            const totalFarms = Math.floor(blockYield / blocksPerFarm);
+            const totalClearCost = totalFarms * clearWorldCostWl;
+            const totalWaterBucketCost = waterBucketCount / waterBucketPricePerWl;
+            const totalCost = totalSeedCost + totalClearCost + totalWaterBucketCost;
+            const totalRevenue = totalFarms * farmSellPriceWl;
+            const netProfit = totalRevenue - totalCost;
+
+            // 3. ROI (Return of Investment)
+            const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+
+            // 4. Update UI labels
+            elSeedCountVal.textContent = seedCount.toLocaleString('id-ID');
+            elBlockYieldVal.textContent = blockYield.toLocaleString('id-ID');
+            elBlocksPerFarmVal.textContent = blocksPerFarm.toLocaleString('id-ID');
+            elClearWorldCostWlVal.textContent = `${clearWorldCostWl} WL`;
+            elFarmSellPriceWlVal.textContent = `${farmSellPriceWl} WL`;
+            elWaterBucketCountVal.textContent = waterBucketCount.toLocaleString('id-ID');
+            elWaterBucketPricePerWlVal.textContent = waterBucketPricePerWl;
+
+            // 5. Update HUD Card Elements
+            elHudFarms.textContent = `${totalFarms} World`;
+            elHudTotalCost.textContent = `${totalCost.toFixed(1)} WL`;
+            elHudRevenue.textContent = `${totalRevenue.toFixed(1)} WL`;
+
+            // Style Net Profit HUD based on Profit/Loss
+            if (netProfit >= 0) {
+                elHudNetProfit.textContent = `+${netProfit.toFixed(1)} WL`;
+                elHudNetProfit.className = "text-3xl md:text-4xl font-extrabold text-green-400 mt-1";
+                elHudReturnRate.textContent = `ROI (Profit Bersih): +${roi.toFixed(1)}%`;
+                elHudReturnRate.className = "text-xs text-green-300 mt-1";
+            } else {
+                elHudNetProfit.textContent = `${netProfit.toFixed(1)} WL`;
+                elHudNetProfit.className = "text-3xl md:text-4xl font-extrabold text-red-400 mt-1";
+                elHudReturnRate.textContent = `Rugi (Kerugian): ${roi.toFixed(1)}%`;
+                elHudReturnRate.className = "text-xs text-red-300 mt-1";
+            }
+
+            // 6. Update Breakdown Table Rows
+            elRowSeedDesc.textContent = `${seedCount.toLocaleString('id-ID')} seeds @ (${seedRateQty}/${seedRateWl} WL)`;
+            elRowSeedTotal.textContent = `-${totalSeedCost.toFixed(1)} WL`;
+
+            elRowClearDesc.textContent = `${totalFarms} worlds @ ${clearWorldCostWl} WL`;
+            elRowClearTotal.textContent = `-${totalClearCost.toFixed(1)} WL`;
+
+            elRowWaterDesc.textContent = `${waterBucketCount.toLocaleString('id-ID')} buckets @ ${waterBucketPricePerWl}/WL`;
+            elRowWaterTotal.textContent = `-${totalWaterBucketCost.toFixed(1)} WL`;
+
+            elRowRevenueDesc.textContent = `${totalFarms} worlds @ ${farmSellPriceWl} WL`;
+            elRowRevenueTotal.textContent = `+${totalRevenue.toFixed(1)} WL`;
+
+            // Final Row styling
+            if (netProfit >= 0) {
+                elRowNetTotal.textContent = `+${netProfit.toFixed(1)} WL`;
+                elRowNetTotal.className = "py-4 px-2 text-right text-green-400 text-lg font-bold";
+            } else {
+                elRowNetTotal.textContent = `${netProfit.toFixed(1)} WL`;
+                elRowNetTotal.className = "py-4 px-2 text-right text-red-400 text-lg font-bold";
+            }
+        }
+
+        // Attach event listeners for inputs
+        const allInputs = [
+            elSeedCount, elSeedRateQty, elSeedRateWl, elBlockYield, 
+            elBlocksPerFarm, elClearWorldCostWl, elFarmSellPriceWl, 
+            elWaterBucketCount, elWaterBucketPricePerWl
+        ];
+
+        allInputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Run on Page Load
+        window.onload = function() {
+            calculate();
+        };
+    </script>
+</body>
+</html>
